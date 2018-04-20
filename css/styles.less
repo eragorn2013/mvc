@@ -1,0 +1,58 @@
+@import url('/css/fonts.css');
+
+*
+{
+	padding: 0;
+	margin: 0;
+	text-decoration: none;	
+	list-style-type: none;
+}
+.clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+.button(@font-size: 22px, @color)
+{
+	/*padding: 9px 30px;	
+	color: @color;
+	border: 1px solid @color;
+	border-radius: 30px;
+	display: inline-block;	
+	font-size: @font-size;*/
+}
+.container(@width: 1900px)
+{
+	width: @width;
+	margin: 0 auto;
+}
+.header_h1(@font-size: 40px)
+{
+	font-size: @font-size;
+}
+.header_h2(@font-size: 22px)
+{
+	/*font-size: @font-size;
+	width: 50%;
+	border-bottom: 2px solid @blue;*/
+}	
+
+.wrapper
+{	
+	.container{.container(1900px);}
+	h1{.header_h1(55px);}
+	h2{.header_h2(40px);}
+	@font-size: 24px;		
+}
+@media (max-width: 1920px)
+{
+	.wrapper
+	{	
+		.container{.container(1660px);}
+		h1{.header_h1(35px);}
+		h2{.header_h2(30px);}
+		@font-size: 19px;
+
+		
+	}
+}

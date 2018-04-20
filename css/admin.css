@@ -1,0 +1,41 @@
+@import url('/css/fonts.css');
+* {
+  padding: 0;
+  margin: 0;
+  text-decoration: none;
+}
+.clearfix::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.wrapper .container {
+  width: 1900px;
+  margin: 0 auto;
+}
+.wrapper h1 {
+  /*font-size: @font-size;	
+	font-family: 'kievitpro-light';
+	border-bottom: 2px solid @yellow;*/
+}
+.wrapper h2 {
+  /*font-size: @font-size;	
+	font-family: 'kievitpro-light';
+	border-bottom: 2px solid @yellow;*/
+}
+@media (max-width: 1920px) {
+  .wrapper .container {
+    width: 1660px;
+    margin: 0 auto;
+  }
+  .wrapper h1 {
+    /*font-size: @font-size;	
+	font-family: 'kievitpro-light';
+	border-bottom: 2px solid @yellow;*/
+  }
+  .wrapper h2 {
+    /*font-size: @font-size;	
+	font-family: 'kievitpro-light';
+	border-bottom: 2px solid @yellow;*/
+  }
+}
