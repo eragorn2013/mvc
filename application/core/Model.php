@@ -17,7 +17,7 @@ class Model
 	     catch( PDOException $e )
 	     {exit( 'Ошибка подключения к базе данных: '.$e->getMessage() );}
 
-	    /*$db=new pdoapi();
+	    $db=new PdoApi();
 
 	    $cfg = ActiveRecord\Config::instance();
 		$cfg->set_model_directory('./application/models/tables');
@@ -26,6 +26,6 @@ class Model
 		    'connectAR' => 'mysql://'.$data['user'].':'.$data['password'].'@'.$data["host"].'/'.$data["dbname"],		    
 		  )
 		);	
-		$cfg->set_default_connection('connectAR');		*/
+		$cfg->set_default_connection('connectAR');	
 	}	
 }
