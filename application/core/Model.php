@@ -17,7 +17,7 @@ class Model
 	     catch( PDOException $e )
 	     {exit( 'Ошибка подключения к базе данных: '.$e->getMessage() );}
 
-	    $db=new PdoApi();
+	    $db=new PdoApi($this->pdo);
 
 	    $cfg = ActiveRecord\Config::instance();
 		$cfg->set_model_directory('./application/models/tables');
