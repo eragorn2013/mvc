@@ -4,8 +4,7 @@
     "version": "2.2.6",
     "license": "MIT",   
     "minimum-stability": "dev",
-   	"require":{
-   		"kktsvetkov/krumo": "*",
+   	"require":{   		
    		"nemo/captcha": "*",
    		"ospinto/dbug": "*",
    		"php-activerecord/php-activerecord": "*",
