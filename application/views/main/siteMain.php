@@ -24,15 +24,15 @@
                         </div>
                   </footer>
             </div>      
-      <link rel="stylesheet" type="text/css" href="/js/owlcarousel/docs/assets/owlcarousel/assets/owl.carousel.min.css">  
-      <link rel="stylesheet" type="text/css" href="/js/owlcarousel/docs/assets/owlcarousel/assets/owl.theme.green.css"> 
-      <link rel="stylesheet" type="text/css" href="/js/lightgallery/dist/css/lightgallery.css">      
+      <link rel="stylesheet" type="text/css" href="/js/node_modules/owl.carousel/docs/assets/owlcarousel/assets/owl.carousel.min.css">  
+      <link rel="stylesheet" type="text/css" href="/js/node_modules/owl.carousel/docs/assets/owlcarousel/assets/owl.theme.green.css"> 
+      <link rel="stylesheet" type="text/css" href="/js/node_modules/lightgallery/dist/css/lightgallery.css">      
       <script src='/js/jquery/jquery-3.2.1.min.js'></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mousewheel/3.1.13/jquery.mousewheel.min.js"></script>
-      <script src='/js/lightgallery/dist/js/lightgallery.min.js'></script>       
+      <script src='/js/node_modules/lightgallery/dist/js/lightgallery.min.js'></script>       
       <script src='/js/phone/jquery.mask.min.js'></script>   
       <script src='<?= User::generateLink("/js/site_settings.js") ?>'></script>      
-      <script src='/js/owlcarousel/docs/assets/owlcarousel/owl.carousel.min.js'></script>     
+      <script src='/js/node_modules/owl.carousel/docs/assets/owlcarousel/owl.carousel.min.js'></script>     
 
       <script>
             $(document).ready(function() {
