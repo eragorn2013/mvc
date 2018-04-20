@@ -7,7 +7,7 @@ class View
 		if($data->captcha===true)
 		{ 
 			session_start();
-			$data->captcha='<img class="captcha" src="/application/includes/kcaptcha/?'.session_name().'='.session_id().'">';	
+			$data->captcha='<img class="captcha" src="/vendor/nemo/captcha/?'.session_name().'='.session_id().'">';	
 		}
 		include_once './application/views/main/'.$main;
 		exit();
