@@ -1,7 +1,7 @@
 {
-    "name": "nemo/karkas-mvc-nemo",
+    "name": "nemo/mvc-karkas",
     "description": "MVC Каркас PHP",
-    "version": "2.2.5",
+    "version": "2.2.6",
     "license": "MIT",   
     "minimum-stability": "dev",
    	"require":{
