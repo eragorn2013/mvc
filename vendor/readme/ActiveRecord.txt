@@ -1,0 +1,316 @@
+https://github.com/jpfuentes2/php-activerecord - гитхаб для скачки и просмотра документации
+ДАЛЕЕ AR (ActiveRecord)
+
+AR скачивается и копируется в ./application/includes - туда, где все библиотеки.
+в файле ./application/includes.php подключаем файл из библиотеки: ./application/includes/activerecord/ActiveRecord.php
+это стандартная процедура - так подключаются практически все библиотеки в моем каркасе.
+
+далее необходимо прописать подключение к базе данных указав все необходимые данные.
+Подключается AR вместе с коннектом к БД в том же файле что и обычное подключение к БД (которым я пользовался
+до AR) и даже в том конструкторе - это файл главного родительского класса model (./application/core/model.php):
+
+
+<?php
+
+class model
+{	
+	protected $pdo;
+	protected $db;
+
+	public function __construct()
+	{		
+		$data = include './application/config/config_db.php';			
+		try
+	     {
+	     	$this->pdo = new PDO( 'mysql:host='.$data["host"].'; dbname='.$data["dbname"] ,$data['user'],$data['password']  );
+	     	$this->pdo->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+	     	$this->pdo->exec( 'SET NAMES "utf8"' );	     	
+	     }
+	     catch( PDOException $e )
+	     {exit( 'Ошибка подключения к базе данных: '.$e->getMessage() );}
+
+	    $this->db=new pdo_api($this->pdo);
+
+	   /*ТУТ НАЧИНАЕТСЯ ПОДКЛЮЧЕНИЕ БАЗЫ ДАННЫХ К AR (ТОТ КОД КОТОРЫЙ И НУЖЕН ДЛЯ РАБОТЫ С AR*/
+
+	    $cfg = ActiveRecord\Config::instance();
+		$cfg->set_model_directory('./application/models/tables');//прописать путь до классов наследуемых от AR
+		$cfg->set_connections(
+		  array(
+		    'connectAR' => 'mysql://'.$data['user'].':'.$data['password'].'@'.$data["host"].'/'.$data["dbname"],		    
+		  )
+		);	
+		$cfg->set_default_connection('connectAR');		
+	}	
+}
+
+главный принцип AR заключается в том, что библиотека создает виртуальную базу данных по принципам ООП:
+- есть файлы (я их кладу отдельно в ./application/models/tables/....php
+- каждый файл это как бы отдельная таблица в БД
+- соответственно название файла и название реализуемого в нем класса должно быть таким же как название таблицы в БД
+с одной лишь оговоркой: если например файл и класс файла называются test, то таблица в БД должна называться tests,
+т.е. с буквой s на конце, иначе будет ошибка говорящая о том, что таблица tests не найдена.
+Понятия не имею почему так сделано, но тем не менее работает это именно так.
+- Класс, реализующий реальную таблицу в БД должен наследоваться от \ActiveRecord\Model
+- В классе необходимо прописать свойства класса, которые соответствуют ПОЛЯМ в базе данных.
+
+КОД ПО ВЫШЕОПИСАННЫМ ПУНКТАМ БУДЕТ ТАКИМ: 
+
+<?php
+
+class admin extends \ActiveRecord\Model //класс AR от которого наследуется admin. 
+{
+     public static $id; //поле в таблице
+     public static $name; //поле в таблице
+     public static $age; //поле в таблице
+}
+
+уверен что данный класс можно дополнять разными возможностями, которые мне пока неведомы.
+
+Реализация такова, что я использую свои файлы модели типа model_site_index.php обычным образом.
+И контроллер обращается именно к этим файлам (так было всегда в моем каркасе, так оно и останется!)
+напомню что речь идет о файлах которые лежат по пути ./application/models/model_site_....php
+а эти файла уже будут через AR обращаться к базе данных и выводить данные а эти данные привычным образом 
+из модели будут возвращаться контроллеру. Т.е работа осуществляется точно также как я работал со свой библиоткеой 
+pdo_api.php
+
+таблица в БД такая: 
+
+_______________
+id | name | age
+---------------
+ 1 |   a  | 25
+---------------
+ 2 |   b  | 99
+---------------
+ 3 |   c  | 77
+---------------
+ 4 |   d  | 55
+---------------
+ 5 |   f  | 55
+---------------
+ 6 |   g  | 46
+и так далее
+
+НАЧНЕМ С ВЫВОДА ИНФОРМАЦИИ ИЗ БАЗЫ ДАННЫХ (реализуем код внутри стандартных файлов модели):
+
+<?php
+class model_site_index extends model
+{
+	public function __construct()
+	{
+		parent::__construct();		
+	}
+
+	public function test()
+	{
+		$test = admin::find(2);
+		echo $test->id.'<br>'; //2
+		echo $test->name.'<br>'; //b
+		echo $test->age.'<br>'; //99
+	}
+/*
+	$test = admin::find(20); - тут обращаемся к таблице (она же файл и класс) и вызываем статичный метод find(arg)
+	В виде аргумента id строки которую необходимо вывести (выводит все поля). Обратить внимание что выводится
+	не по номеру строки а именно по ID
+*/	    
+}
+
+<?php
+class model_site_index extends model
+{
+	public function __construct()
+	{
+		parent::__construct();		
+	}
+
+	public function test()
+	{
+		$test = admin::first();
+		echo $test->id.'<br>'; //1
+		echo $test->name.'<br>'; //a
+		echo $test->age.'<br>';	//25
+	}
+/*
+	$test = admin::first(); - очевидно, что выводится самая первая строка в таблице
+*/	    
+}
+
+<?php
+class model_site_index extends model
+{
+	public function __construct()
+	{
+		parent::__construct();		
+	}
+
+	public function test()
+	{
+		$test = admin::find_by_name('a');
+		echo $test->id.'<br>';
+		echo $test->name.'<br>';
+		echo $test->age.'<br>';
+	}
+/*
+	$test = admin::find_by_name('a'); - метод выводит только одну строку (первое совпадение). Ищет в таблице поле name.
+	Если поля нет, тогда выводит ошибку. В таблице name должно быть обязательно. Если например будет два одинаковых 
+	имени или больше, массив выводиться не будет. Выведется только одна строка (самая первая совпавшая)
+*/    
+}
+
+<?php
+class model_site_index extends model
+{
+	public function __construct()
+	{
+		parent::__construct();		
+	}
+
+	public function test()
+	{
+		$test = admin::find_by_name_and_id('a', 1);
+		echo $test->id.'<br>';
+		echo $test->name.'<br>';
+		echo $test->age.'<br>';
+	}
+/*
+	$test = admin::find_by_name_and_id('a', 1); - тоже самое что и find_by_name только тут еще должен совпасть и id.
+	т.е. и id и имя должны быть в одной строке такие же как в аргументах метода. Выводится лишь одна строка
+*/ 	    
+}
+
+<?php
+class model_site_index extends model
+{
+	public function __construct()
+	{
+		parent::__construct();		
+	}
+
+	public function test()
+	{
+		$test = admin::all();
+		out($test);
+		echo $test->name.'<br>';
+		echo $test->age.'<br>';
+	}	
+/*
+	$test = admin::all(); - тут уже вывод всех элементов таблицы
+*/     
+}
+
+<?php
+class model_site_index extends model
+{
+	public function __construct()
+	{
+		parent::__construct();		
+	}
+
+	public function test()
+	{
+		$test = admin::find('all', ['conditions' => ['name=? and id=? and age=?', 'b', 2, 27]]);
+		out($test);		
+	}
+/*
+	таким способом мы задаем 'conditions' (в переводе "условия")
+	первый аргумент говорит о том что выводим все совпавшие элементы. Т.е. уже будет не одна строка
+	а то количество строк, которой совпадет с условием)
+	['name=? and id=? and age=?', 'b', 2, 27] - а вот тут первым элементом массива будет строка, которая
+	является шаблоном запроса. Остальные элементы массива заполняют знаки вопросов в шаблоне в том 
+	порядке, в котором они и следуют. Первый знак вопроса, например заменяется на "b" и так далее.
+*/	    
+}
+
+ДОБАВЛЕНИЕ ЭЛЕМЕНТОВ В ТАБЛИЦУ
+
+<?php
+class model_site_index extends model
+{
+	public function __construct()
+	{
+		parent::__construct();		
+	}
+
+	public function test()
+	{
+		$test = new admin();
+		$test->name='NEMO';
+		$test->age=28;
+		$test->save();		
+	}
+/*
+	используются уже НЕ статичные методы. Необходимо создать экземпляр класса admin и заполнить значениями
+	свойства (которые дублируют названия полей в таблице admin). А затем вызвать метод save, который 
+	сохранит новую строку в базе данных заполнив соответствующие поля значениями из объекта test
+	id у меня в таблицах всегда автоинкрементируются
+*/	    
+}
+
+ОБНОВЛЕНИЕ ЭЛЕМЕНТОВ В ТАБЛИЦЕ
+
+<?php
+class model_site_index extends model
+{
+	public function __construct()
+	{
+		parent::__construct();		
+	}
+
+	public function test()
+	{
+		$test=admin::find(4); 
+		$test->name='igor';
+		$test->age=222;
+		$test->save();
+	}
+/*
+	$test=admin::find(4); - получаем данные строки с id 4 таблицы admin. Заодно система запоминает 
+	какой id вызывался на случай, если данные будут обновлять. У нас как раз такой случай. 
+	поля таблицы (они же свойства объекта) именуются так как необходимо, после вызывается 
+	метод save который обновляет данные в строке с id = 4. Обновляются именно те поля, которые были 
+	изменены как свойства в объекте. 
+	такой запрос эквивалентен примерно такому запросу # UPDATE `posts` SET title='Some real title' WHERE id=1
+*/	    
+}
+
+УДАЛЕНИЕ ДАННЫХ
+
+<?php
+class model_site_index extends model
+{
+	public function __construct()
+	{
+		parent::__construct();		
+	}
+
+	public function test()
+	{
+		$test=admin::find(3);
+		$test->delete();		
+	}
+/*
+	$test=admin::find(3); - получаем объект в котором строка с id=3 таблицы admin.
+	а затем удаляем данную строку методом delete() (# DELETE FROM `posts` WHERE id=1)
+*/	    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
