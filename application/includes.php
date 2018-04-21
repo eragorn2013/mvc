@@ -1,7 +1,6 @@
 <?php 
 
 require_once './application/config/config_system.php';
-require_once './application/includes/functions.php';
 require_once './application/core/Model.php';
 require_once './application/core/Controller.php';
 require_once './application/core/View.php';
