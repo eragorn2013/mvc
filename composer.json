@@ -14,7 +14,10 @@
    		"respect/validation": "*",
    		"nemo/pdo": "*"        
   	},
-    "post-create-project-cmd": [        
-      "npm install"        
-    ]
+    "scripts":{
+      "post-create-project-cmd":[ 
+        "cd js",           
+        "npm install"        
+      ]
+    }   
 }
