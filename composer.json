@@ -13,5 +13,9 @@
    		"PHPMailer/PHPMailer": "*",
    		"respect/validation": "*",
    		"nemo/pdo": "*"        
-  	}
+  	},
+    "post-install-cmd": [
+        "cd js",        
+        "npm install"        
+    ]
 }
