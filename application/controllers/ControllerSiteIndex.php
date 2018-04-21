@@ -14,6 +14,8 @@ class ControllerSiteIndex extends Controller
     public function actionIndex()
     {       
         $this->model->test();
-        $this->view->render('siteMain.php', 'siteIndex.php', ['captcha'=>true]);
+        $this->view->render('siteMain.php', 'siteIndex.php', [
+            'captcha'=>true,                      
+        ]);
     }   
 }
