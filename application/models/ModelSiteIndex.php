@@ -8,7 +8,7 @@ class ModelSiteIndex extends Model
 	}
 
 	public function test()
-	{		
-		
-	}	    
+	{	
+			
+	}
 }
