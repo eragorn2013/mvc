@@ -12,6 +12,7 @@
    		"kktsvetkov/krumo": "*",
    		"PHPMailer/PHPMailer": "*",
    		"respect/validation": "*",
-   		"nemo/pdo": "*"      
+   		"nemo/pdo": "*",
+        "eloquent/composer-npm-bridge": "~2"
   	}
 }
