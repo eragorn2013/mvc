@@ -23,7 +23,7 @@ class Model
 		$cfg->set_model_directory('./application/models/tables');
 		$cfg->set_connections(
 		  array(
-		    'connectAR' => 'mysql://'.$data['user'].':'.$data['password'].'@'.$data["host"].'/'.$data["dbname"],		    
+		    'connectAR' => 'mysql://'.$data['user'].':'.$data['password'].'@'.$data["host"].'/'.$data["dbname"].';charset=utf8',		    
 		  )
 		);	
 		$cfg->set_default_connection('connectAR');	
